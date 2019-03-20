@@ -1,0 +1,2 @@
+/usr/bin/ar qc libbin_utils.a  CMakeFiles/bin_utils.dir/bin_utils.cpp.o
+/usr/bin/ranlib libbin_utils.a

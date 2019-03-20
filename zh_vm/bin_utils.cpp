@@ -2,10 +2,11 @@
 #include "bin_utils.h"
 #include "Hardware.h"
 
-void set_bit(Byte data, Byte value, unsigned int i)
+Status set_bit(Byte data, Byte value, unsigned int i)
 {
 	printf(">> %x\n", value << i);
 	data = data | (value << i);
+	return data;
 }
 
 Byte get_bit(Byte data, unsigned int i)

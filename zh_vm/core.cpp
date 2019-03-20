@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "Hardware.h"
+#include "types.h"
 
 int main()
 {
@@ -12,6 +13,4 @@ int main()
 	Byte test = 0b0;
 	set_bit(test, 0b1, 7);
 	printf("%x\n", test);
-
-	while (1) {}
 }

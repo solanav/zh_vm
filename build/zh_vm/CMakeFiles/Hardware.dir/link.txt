@@ -1,0 +1,2 @@
+/usr/bin/ar qc libHardware.a  CMakeFiles/Hardware.dir/Hardware.cpp.o
+/usr/bin/ranlib libHardware.a

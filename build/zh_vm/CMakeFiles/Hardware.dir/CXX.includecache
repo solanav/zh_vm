@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/zh/Projects/zh_vm/zh_vm/Hardware.cpp
+iostream
+-
+vector
+-
+Hardware.h
+/home/zh/Projects/zh_vm/zh_vm/Hardware.h
+
+/home/zh/Projects/zh_vm/zh_vm/Hardware.h
+vector
+-
+bin_utils.h
+/home/zh/Projects/zh_vm/zh_vm/bin_utils.h
+
+/home/zh/Projects/zh_vm/zh_vm/bin_utils.h
+types.h
+/home/zh/Projects/zh_vm/zh_vm/types.h
+
+/home/zh/Projects/zh_vm/zh_vm/types.h
+

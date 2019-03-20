@@ -1,0 +1,1 @@
+/usr/bin/g++-7  -g  -rdynamic CMakeFiles/core.dir/core.cpp.o  -o core libbin_utils.a libHardware.a 
