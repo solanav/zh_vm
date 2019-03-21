@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/zh/Projects/zh_vm/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -77,6 +66,17 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -111,19 +111,19 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-zh_vm/CMakeFiles/core.dir/rule:
-	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f CMakeFiles/Makefile2 zh_vm/CMakeFiles/core.dir/rule
-.PHONY : zh_vm/CMakeFiles/core.dir/rule
+zh_vm/CMakeFiles/bin_utils.dir/rule:
+	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f CMakeFiles/Makefile2 zh_vm/CMakeFiles/bin_utils.dir/rule
+.PHONY : zh_vm/CMakeFiles/bin_utils.dir/rule
 
 # Convenience name for target.
-core: zh_vm/CMakeFiles/core.dir/rule
+bin_utils: zh_vm/CMakeFiles/bin_utils.dir/rule
 
-.PHONY : core
+.PHONY : bin_utils
 
 # fast build rule for target.
-core/fast:
-	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f zh_vm/CMakeFiles/core.dir/build.make zh_vm/CMakeFiles/core.dir/build
-.PHONY : core/fast
+bin_utils/fast:
+	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f zh_vm/CMakeFiles/bin_utils.dir/build.make zh_vm/CMakeFiles/bin_utils.dir/build
+.PHONY : bin_utils/fast
 
 # Convenience name for target.
 zh_vm/CMakeFiles/Hardware.dir/rule:
@@ -141,19 +141,34 @@ Hardware/fast:
 .PHONY : Hardware/fast
 
 # Convenience name for target.
-zh_vm/CMakeFiles/bin_utils.dir/rule:
-	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f CMakeFiles/Makefile2 zh_vm/CMakeFiles/bin_utils.dir/rule
-.PHONY : zh_vm/CMakeFiles/bin_utils.dir/rule
+zh_vm/CMakeFiles/Processor.dir/rule:
+	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f CMakeFiles/Makefile2 zh_vm/CMakeFiles/Processor.dir/rule
+.PHONY : zh_vm/CMakeFiles/Processor.dir/rule
 
 # Convenience name for target.
-bin_utils: zh_vm/CMakeFiles/bin_utils.dir/rule
+Processor: zh_vm/CMakeFiles/Processor.dir/rule
 
-.PHONY : bin_utils
+.PHONY : Processor
 
 # fast build rule for target.
-bin_utils/fast:
-	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f zh_vm/CMakeFiles/bin_utils.dir/build.make zh_vm/CMakeFiles/bin_utils.dir/build
-.PHONY : bin_utils/fast
+Processor/fast:
+	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f zh_vm/CMakeFiles/Processor.dir/build.make zh_vm/CMakeFiles/Processor.dir/build
+.PHONY : Processor/fast
+
+# Convenience name for target.
+zh_vm/CMakeFiles/core.dir/rule:
+	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f CMakeFiles/Makefile2 zh_vm/CMakeFiles/core.dir/rule
+.PHONY : zh_vm/CMakeFiles/core.dir/rule
+
+# Convenience name for target.
+core: zh_vm/CMakeFiles/core.dir/rule
+
+.PHONY : core
+
+# fast build rule for target.
+core/fast:
+	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f zh_vm/CMakeFiles/core.dir/build.make zh_vm/CMakeFiles/core.dir/build
+.PHONY : core/fast
 
 Hardware.o: Hardware.cpp.o
 
@@ -181,6 +196,33 @@ Hardware.s: Hardware.cpp.s
 Hardware.cpp.s:
 	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f zh_vm/CMakeFiles/Hardware.dir/build.make zh_vm/CMakeFiles/Hardware.dir/Hardware.cpp.s
 .PHONY : Hardware.cpp.s
+
+Processor.o: Processor.cpp.o
+
+.PHONY : Processor.o
+
+# target to build an object file
+Processor.cpp.o:
+	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f zh_vm/CMakeFiles/Processor.dir/build.make zh_vm/CMakeFiles/Processor.dir/Processor.cpp.o
+.PHONY : Processor.cpp.o
+
+Processor.i: Processor.cpp.i
+
+.PHONY : Processor.i
+
+# target to preprocess a source file
+Processor.cpp.i:
+	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f zh_vm/CMakeFiles/Processor.dir/build.make zh_vm/CMakeFiles/Processor.dir/Processor.cpp.i
+.PHONY : Processor.cpp.i
+
+Processor.s: Processor.cpp.s
+
+.PHONY : Processor.s
+
+# target to generate assembly for a file
+Processor.cpp.s:
+	cd /home/zh/Projects/zh_vm/build && $(MAKE) -f zh_vm/CMakeFiles/Processor.dir/build.make zh_vm/CMakeFiles/Processor.dir/Processor.cpp.s
+.PHONY : Processor.cpp.s
 
 bin_utils.o: bin_utils.cpp.o
 
@@ -242,14 +284,18 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... core"
-	@echo "... Hardware"
 	@echo "... bin_utils"
+	@echo "... Hardware"
+	@echo "... Processor"
+	@echo "... core"
+	@echo "... edit_cache"
 	@echo "... Hardware.o"
 	@echo "... Hardware.i"
 	@echo "... Hardware.s"
+	@echo "... Processor.o"
+	@echo "... Processor.i"
+	@echo "... Processor.s"
 	@echo "... bin_utils.o"
 	@echo "... bin_utils.i"
 	@echo "... bin_utils.s"

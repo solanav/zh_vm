@@ -14,8 +14,8 @@ int main()
 
 	processor.eval(program, sizeof(program));
 	hardware.print_register(BX);
-
+#ifdef _WIN32
 	while (1) {}
-
+#endif
 	return OK;
 }

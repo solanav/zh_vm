@@ -92,6 +92,7 @@ zh_vm/core: zh_vm/CMakeFiles/core.dir/core.cpp.o
 zh_vm/core: zh_vm/CMakeFiles/core.dir/build.make
 zh_vm/core: zh_vm/libbin_utils.a
 zh_vm/core: zh_vm/libHardware.a
+zh_vm/core: zh_vm/libProcessor.a
 zh_vm/core: zh_vm/CMakeFiles/core.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zh/Projects/zh_vm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable core"
 	cd /home/zh/Projects/zh_vm/build/zh_vm && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/core.dir/link.txt --verbose=$(VERBOSE)

@@ -11,28 +11,44 @@ Hardware::Hardware()
 	// Create registers
 	register_page = Hardware::create_register_page();
 	list_register_pages.push_back(register_page);
+
+	// Create flags
+	flag_page = Hardware::create_flag_page();
+	list_flag_pages.push_back(flag_page);
 }
 
 Memory_page Hardware::create_memory_page()
 {
 	Byte *memory_page = (Byte *) calloc(PAGE_SIZE, sizeof(Byte));
-	if (memory_page)
-		return memory_page;
+	if (!memory_page)
+		return NULL;
 
-	return NULL;
+	return memory_page;
 }
 
 Register_page Hardware::create_register_page()
 {
 	Byte *register_page = (Byte *) calloc(NUM_REGS, sizeof(Byte) * 2);
-	if (register_page)
-		return register_page;
+	if (!register_page)
+		return NULL;
 
-	return NULL;
+	return register_page;
+}
+
+Flag_page Hardware::create_flag_page()
+{
+	Byte *flag_page = (Byte *) calloc(NUM_FLAGS/BITS_B, sizeof(Byte));
+	if (!flag_page)
+		return NULL;
+
+	return flag_page;
 }
 
 Status Hardware::set_register(Word register_index, Byte new_value)
 {
+	if (register_index >= NUM_REGS)
+		return ERROR;
+
 	register_page[register_index] = new_value;
 	return OK;
 }
@@ -41,10 +57,11 @@ Status Hardware::set_register(Word register_index, Word new_value)
 {
 	Byte high, low;
 
+	if (register_index >= NUM_REGS)
+		return ERROR;
+
 	high = new_value / 0x100;
 	low = new_value % 0x100;
-
-	std::cout << "Writing to register " << register_index << " value " << new_value << std::endl;
 
 	register_page[register_index] = high;
 	register_page[register_index + 1] = low;
@@ -54,6 +71,9 @@ Status Hardware::set_register(Word register_index, Word new_value)
 
 Word Hardware::get_register(Word register_index)
 {
+	if (register_index >= NUM_REGS)
+		return ERROR;
+
 	if (register_index % 2 == 0)
 		return register_page[register_index] * 0x100 + register_page[register_index + 1];
 
@@ -62,6 +82,9 @@ Word Hardware::get_register(Word register_index)
 
 Status Hardware::set_memory(Word memory_index, Byte new_value)
 {
+	if (memory_index >= PAGE_SIZE)
+		return ERROR;
+
 	memory_page[memory_index] = new_value;
 
 	return OK;
@@ -70,6 +93,9 @@ Status Hardware::set_memory(Word memory_index, Byte new_value)
 Status Hardware::set_memory(Word memory_index, Word new_value)
 {
 	Byte high, low;
+
+	if (memory_index >= PAGE_SIZE)
+		return ERROR;
 
 	high = new_value / 0x100;
 	low = new_value % 0x100;
@@ -82,8 +108,30 @@ Status Hardware::set_memory(Word memory_index, Word new_value)
 
 Word Hardware::get_memory(Word memory_index)
 {
+	if (memory_index >= PAGE_SIZE)
+		return ERROR;
+
 	return memory_page[memory_index] * 0x100 + memory_page[memory_index + 1];
 }
+
+Status Hardware::set_flag(Word flag_index, Byte new_value)
+{
+	if (flag_index >= NUM_FLAGS)
+		return ERROR;
+
+	flag_page[flag_index] = new_value;
+
+	return OK;
+}
+
+Word Hardware::get_flag(Word flag_index)
+{
+	if (flag_index >= NUM_FLAGS)
+		return ERROR;
+
+	return flag_page[flag_index];
+}
+
 
 void Hardware::print_register(Word register_index)
 {
@@ -93,4 +141,9 @@ void Hardware::print_register(Word register_index)
 void Hardware::print_memory(Word memory_index)
 {
 	printf("0x%.4x\n", get_memory(memory_index));
+}
+
+void Hardware::print_flag(Word flag_index)
+{
+	printf("0x%x\n", get_flag(flag_index));
 }

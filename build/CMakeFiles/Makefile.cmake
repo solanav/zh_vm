@@ -44,7 +44,8 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "zh_vm/CMakeFiles/core.dir/DependInfo.cmake"
-  "zh_vm/CMakeFiles/Hardware.dir/DependInfo.cmake"
   "zh_vm/CMakeFiles/bin_utils.dir/DependInfo.cmake"
+  "zh_vm/CMakeFiles/Hardware.dir/DependInfo.cmake"
+  "zh_vm/CMakeFiles/Processor.dir/DependInfo.cmake"
+  "zh_vm/CMakeFiles/core.dir/DependInfo.cmake"
   )

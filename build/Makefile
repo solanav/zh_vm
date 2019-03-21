@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named core
+# Target rules for targets named bin_utils
 
 # Build rule for target.
-core: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 core
-.PHONY : core
+bin_utils: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 bin_utils
+.PHONY : bin_utils
 
 # fast build rule for target.
-core/fast:
-	$(MAKE) -f zh_vm/CMakeFiles/core.dir/build.make zh_vm/CMakeFiles/core.dir/build
-.PHONY : core/fast
+bin_utils/fast:
+	$(MAKE) -f zh_vm/CMakeFiles/bin_utils.dir/build.make zh_vm/CMakeFiles/bin_utils.dir/build
+.PHONY : bin_utils/fast
 
 #=============================================================================
 # Target rules for targets named Hardware
@@ -137,17 +137,30 @@ Hardware/fast:
 .PHONY : Hardware/fast
 
 #=============================================================================
-# Target rules for targets named bin_utils
+# Target rules for targets named Processor
 
 # Build rule for target.
-bin_utils: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 bin_utils
-.PHONY : bin_utils
+Processor: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Processor
+.PHONY : Processor
 
 # fast build rule for target.
-bin_utils/fast:
-	$(MAKE) -f zh_vm/CMakeFiles/bin_utils.dir/build.make zh_vm/CMakeFiles/bin_utils.dir/build
-.PHONY : bin_utils/fast
+Processor/fast:
+	$(MAKE) -f zh_vm/CMakeFiles/Processor.dir/build.make zh_vm/CMakeFiles/Processor.dir/build
+.PHONY : Processor/fast
+
+#=============================================================================
+# Target rules for targets named core
+
+# Build rule for target.
+core: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 core
+.PHONY : core
+
+# fast build rule for target.
+core/fast:
+	$(MAKE) -f zh_vm/CMakeFiles/core.dir/build.make zh_vm/CMakeFiles/core.dir/build
+.PHONY : core/fast
 
 # Help Target
 help:
@@ -157,9 +170,10 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... core"
-	@echo "... Hardware"
 	@echo "... bin_utils"
+	@echo "... Hardware"
+	@echo "... Processor"
+	@echo "... core"
 .PHONY : help
 
 

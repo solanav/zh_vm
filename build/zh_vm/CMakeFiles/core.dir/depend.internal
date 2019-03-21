@@ -3,6 +3,7 @@
 
 zh_vm/CMakeFiles/core.dir/core.cpp.o
  /home/zh/Projects/zh_vm/zh_vm/Hardware.h
+ /home/zh/Projects/zh_vm/zh_vm/Processor.h
  /home/zh/Projects/zh_vm/zh_vm/bin_utils.h
  /home/zh/Projects/zh_vm/zh_vm/core.cpp
  /home/zh/Projects/zh_vm/zh_vm/types.h
