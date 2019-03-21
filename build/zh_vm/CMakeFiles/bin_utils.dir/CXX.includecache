@@ -6,19 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/zh/Projects/zh_vm/zh_vm/Hardware.h
-vector
--
-bin_utils.h
-/home/zh/Projects/zh_vm/zh_vm/bin_utils.h
-
 /home/zh/Projects/zh_vm/zh_vm/bin_utils.cpp
 stdio.h
 -
 bin_utils.h
 /home/zh/Projects/zh_vm/zh_vm/bin_utils.h
-Hardware.h
-/home/zh/Projects/zh_vm/zh_vm/Hardware.h
 
 /home/zh/Projects/zh_vm/zh_vm/bin_utils.h
 types.h

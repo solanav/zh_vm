@@ -1,17 +1,19 @@
 #include <stdio.h>
 #include "bin_utils.h"
-#include "Hardware.h"
 
-Status set_bit(Byte data, Byte value, unsigned int i)
+Status set_bit(Byte *data, unsigned long i)
 {
-	printf(">> %x\n", value << i);
-	data = data | (value << i);
-	return data;
+	*data |= (1UL << i);
+	return OK;
 }
 
-Byte get_bit(Byte data, unsigned int i)
+Status clear_bit(Byte *data, unsigned long i)
 {
-	Byte result = 0b1;
-	result = result << i;
-	return data & result;
+	*data &= ~(1UL << i);
+	return OK;
+}
+
+Byte get_bit(Byte data, unsigned long i)
+{
+	return ((1UL << i) & data) != 0;
 }

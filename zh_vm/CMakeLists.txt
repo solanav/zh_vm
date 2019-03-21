@@ -11,4 +11,9 @@ target_include_directories(types INTERFACE ./)
 
 add_executable (core core.cpp)
 target_link_libraries(core bin_utils Hardware types)
-# TODO: Add tests and install targets if needed.
+
+if(MSVC)
+	target_compile_options(core PRIVATE /W4 /WX)
+else(MSVC)
+	target_compile_options(core PRIVATE -Wall -Wextra -pedantic -Werror)
+endif(MSVC)

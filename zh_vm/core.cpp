@@ -6,11 +6,11 @@
 int main()
 {
 	Hardware hardware;
-	Memory_page memory_page;
+	//Byte test0 = 0xFF;
+	Word test1 = 0xAABB;
 
-	memory_page = hardware.create_memory_page();
+	hardware.set_memory(1, test1);
+	hardware.print_memory(1);
 
-	Byte test = 0b0;
-	set_bit(test, 0b1, 7);
-	printf("%x\n", test);
+	return OK;
 }

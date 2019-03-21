@@ -60,15 +60,15 @@ include zh_vm/CMakeFiles/bin_utils.dir/flags.make
 zh_vm/CMakeFiles/bin_utils.dir/bin_utils.cpp.o: zh_vm/CMakeFiles/bin_utils.dir/flags.make
 zh_vm/CMakeFiles/bin_utils.dir/bin_utils.cpp.o: ../zh_vm/bin_utils.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zh/Projects/zh_vm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object zh_vm/CMakeFiles/bin_utils.dir/bin_utils.cpp.o"
-	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/bin_utils.dir/bin_utils.cpp.o -c /home/zh/Projects/zh_vm/zh_vm/bin_utils.cpp
+	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/bin_utils.dir/bin_utils.cpp.o -c /home/zh/Projects/zh_vm/zh_vm/bin_utils.cpp
 
 zh_vm/CMakeFiles/bin_utils.dir/bin_utils.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/bin_utils.dir/bin_utils.cpp.i"
-	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zh/Projects/zh_vm/zh_vm/bin_utils.cpp > CMakeFiles/bin_utils.dir/bin_utils.cpp.i
+	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zh/Projects/zh_vm/zh_vm/bin_utils.cpp > CMakeFiles/bin_utils.dir/bin_utils.cpp.i
 
 zh_vm/CMakeFiles/bin_utils.dir/bin_utils.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/bin_utils.dir/bin_utils.cpp.s"
-	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zh/Projects/zh_vm/zh_vm/bin_utils.cpp -o CMakeFiles/bin_utils.dir/bin_utils.cpp.s
+	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zh/Projects/zh_vm/zh_vm/bin_utils.cpp -o CMakeFiles/bin_utils.dir/bin_utils.cpp.s
 
 zh_vm/CMakeFiles/bin_utils.dir/bin_utils.cpp.o.requires:
 

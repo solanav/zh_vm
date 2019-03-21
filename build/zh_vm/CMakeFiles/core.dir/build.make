@@ -60,15 +60,15 @@ include zh_vm/CMakeFiles/core.dir/flags.make
 zh_vm/CMakeFiles/core.dir/core.cpp.o: zh_vm/CMakeFiles/core.dir/flags.make
 zh_vm/CMakeFiles/core.dir/core.cpp.o: ../zh_vm/core.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zh/Projects/zh_vm/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object zh_vm/CMakeFiles/core.dir/core.cpp.o"
-	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/core.dir/core.cpp.o -c /home/zh/Projects/zh_vm/zh_vm/core.cpp
+	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/core.dir/core.cpp.o -c /home/zh/Projects/zh_vm/zh_vm/core.cpp
 
 zh_vm/CMakeFiles/core.dir/core.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/core.dir/core.cpp.i"
-	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zh/Projects/zh_vm/zh_vm/core.cpp > CMakeFiles/core.dir/core.cpp.i
+	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zh/Projects/zh_vm/zh_vm/core.cpp > CMakeFiles/core.dir/core.cpp.i
 
 zh_vm/CMakeFiles/core.dir/core.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/core.dir/core.cpp.s"
-	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zh/Projects/zh_vm/zh_vm/core.cpp -o CMakeFiles/core.dir/core.cpp.s
+	cd /home/zh/Projects/zh_vm/build/zh_vm && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zh/Projects/zh_vm/zh_vm/core.cpp -o CMakeFiles/core.dir/core.cpp.s
 
 zh_vm/CMakeFiles/core.dir/core.cpp.o.requires:
 

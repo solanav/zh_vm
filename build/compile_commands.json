@@ -1,7 +1,7 @@
 [
 {
   "directory": "/home/zh/Projects/zh_vm/build/zh_vm",
-  "command": "/usr/bin/g++-7   -I/home/zh/Projects/zh_vm/zh_vm/.  -g   -o CMakeFiles/core.dir/core.cpp.o -c /home/zh/Projects/zh_vm/zh_vm/core.cpp",
+  "command": "/usr/bin/g++-7   -I/home/zh/Projects/zh_vm/zh_vm/.  -g   -Wall -Wextra -pedantic -Werror -o CMakeFiles/core.dir/core.cpp.o -c /home/zh/Projects/zh_vm/zh_vm/core.cpp",
   "file": "/home/zh/Projects/zh_vm/zh_vm/core.cpp"
 },
 {
