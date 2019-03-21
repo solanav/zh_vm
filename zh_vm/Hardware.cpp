@@ -44,6 +44,8 @@ Status Hardware::set_register(Word register_index, Word new_value)
 	high = new_value / 0x100;
 	low = new_value % 0x100;
 
+	std::cout << "Writing to register " << register_index << " value " << new_value << std::endl;
+
 	register_page[register_index] = high;
 	register_page[register_index + 1] = low;
 

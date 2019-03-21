@@ -1,16 +1,21 @@
 #include <iostream>
 #include <vector>
 #include "Hardware.h"
+#include "Processor.h"
 #include "types.h"
 
 int main()
 {
 	Hardware hardware;
-	//Byte test0 = 0xFF;
-	Word test1 = 0xAABB;
+	Processor processor(hardware);
+	unsigned char program[] =
+		"\x0\x0\x1\x0" "\x0\x0\x0\x0\x0\x1\x0\x0\x0\x0\x1\x0"
+		"\x0\x0\x0\x0" "\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0";
 
-	hardware.set_memory(1, test1);
-	hardware.print_memory(1);
+	processor.eval(program, sizeof(program));
+	hardware.print_register(BX);
+
+	while (1) {}
 
 	return OK;
 }
