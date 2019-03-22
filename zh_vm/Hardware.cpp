@@ -117,21 +117,33 @@ Word Hardware::get_memory(Word memory_index)
 
 Status Hardware::set_flag(Word flag_index, Byte new_value)
 {
+	int bit, byte;
+	Byte tmp = 0;
+
 	if (flag_index >= NUM_FLAGS)
 		return ERROR;
 
-	flag_page[flag_index / FLAG_ARRAY_SIZE] = 
-		(new_value == 0) ? 0 : 1;
+	byte = flag_index / 8;
+	bit = flag_index - (byte * 8);
+
+	(new_value == 0) ? clear_bit(&tmp, bit) : set_bit(&tmp, bit);
+
+	flag_page[byte] = tmp;
 
 	return OK;
 }
 
 Word Hardware::get_flag(Word flag_index)
 {
+	int bit, byte;
+
 	if (flag_index >= NUM_FLAGS)
 		return ERROR;
 
-	return flag_page[flag_index / FLAG_ARRAY_SIZE];
+	byte = flag_index / 8;
+	bit = flag_index - (byte * 8);
+
+	return get_bit(flag_page[byte], bit);
 }
 
 
