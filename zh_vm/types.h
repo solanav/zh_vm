@@ -3,8 +3,6 @@
 #define OK 1
 #define ERROR 0
 
-#define BITS_B 8
-
 #define AX 0
 #define AH AX
 #define AL AX + 1

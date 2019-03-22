@@ -16,6 +16,7 @@
 
 #define FLAGS_SIZE 1
 #define NUM_FLAGS 32
+#define FLAG_ARRAY_SIZE NUM_FLAGS/8
 
 typedef Byte *Memory_page;
 typedef Byte *Register_page;

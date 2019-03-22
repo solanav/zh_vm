@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <iostream>
 #include <string.h>
 #include <stdlib.h>
 
@@ -25,11 +26,12 @@ struct Instruction {
 
 int bin_to_dec(unsigned char *bin, size_t size)
 {
-	int i, result = 0, current_val = 1;
+	size_t i;
+	int result = 0, current_val = 1;
 
-	for (i = size - 1; i >= 0; i--)
+	for (i = size; i > 0; i--)
 	{
-		if (bin[i] == '\x01')
+		if (bin[i - 1] == '\x01')
 			result += current_val;
 		current_val *= 2;
 	}
@@ -93,7 +95,7 @@ Status Processor::eval(unsigned char *program, size_t size)
 			hardware.set_register(ins->op0, hardware.get_register(ins->op0) + hardware.get_register(ins->op1));
 			break;
 		case 4:
-			printf(ADDR_STR "addi %d, %d\n", instruction_offset, ins->op0, ins->op1);
+			printf(ADDR_STR "addi %d, %d [%d]\n", instruction_offset, ins->op0, ins->op1, hardware.get_register(ins->op0));
 			hardware.set_register(ins->op0, hardware.get_register(ins->op0) + ins->op1);
 			break;
 		case 5:
@@ -108,47 +110,56 @@ Status Processor::eval(unsigned char *program, size_t size)
 			printf(ADDR_STR "jmp %x\n", instruction_offset, ins->memory_address);
 			new_offset = ins->memory_address;
 			break;
-		/*case 8:
-			printf(ADDR_STR "cmp %d %d [%d - %d]\n", instruction_offset, ins->op0, ins->op1, registers[ins->op0], registers[ins->op1]);
-			if (registers[ins->op0] == registers[ins->op1]) {
-				flags[0] = 1;
+		case 8:
+			printf(ADDR_STR "cmp %d %d [%d - %d]\n", 
+				instruction_offset, 
+				ins->op0, ins->op1, 
+				hardware.get_register(ins->op0), 
+				hardware.get_register(ins->op1));
+
+			if (hardware.get_register(ins->op0) == hardware.get_register(ins->op1)) {
+				hardware.set_flag(0, 1);
 			}
-			else if (registers[ins->op0] > registers[ins->op1]) {
-				flags[1] = 0;
-				flags[0] = 0;
+			else if (hardware.get_register(ins->op0) > hardware.get_register(ins->op1)) {
+				hardware.set_flag(0, 0);
+				hardware.set_flag(1, 0);
 			}
-			else if (registers[ins->op0] < registers[ins->op1]) {
-				flags[1] = 1;
-				flags[0] = 0;
+			else if (hardware.get_register(ins->op0) < hardware.get_register(ins->op1)) {
+				hardware.set_flag(0, 0);
+				hardware.set_flag(1, 1);
 			}
 			break;
 		case 9:
 			printf(ADDR_STR "ja %x\n", instruction_offset, ins->memory_address);
-			if (flags[1] == 0 && flags[0] != 1)
+			if (hardware.get_flag(1) == 0 && hardware.get_flag(0) != 1)
 				new_offset = ins->memory_address;
 			break;
 		case 10:
 			printf(ADDR_STR "jb %x\n", instruction_offset, ins->memory_address);
-			if (flags[1] == 1 && flags[0] != 1)
+			if (hardware.get_flag(1) == 1 && hardware.get_flag(0) != 1)
 				new_offset = ins->memory_address;
 			break;
 		case 11:
 			printf(ADDR_STR "je %x\n", instruction_offset, ins->memory_address);
-			if (flags[0] == 1)
+			if (hardware.get_flag(0) == 1)
 				new_offset = ins->memory_address;
 			break;
 		case 12:
-			printf(ADDR_STR "wr %x (ra)\n", ins->memory_address);
-			memory[ins->memory_address] = registers[0];
+			printf(ADDR_STR "wr %x (ra)\n", instruction_offset, ins->memory_address);
+			hardware.set_memory(ins->memory_address, hardware.get_register(0));
 			break;
 		case 13:
-			printf(ADDR_STR "re (ra) %x\n", ins->memory_address);
-			registers[0] = memory[ins->memory_address];
-			break;*/
+			printf(ADDR_STR "re (ra) %x\n", instruction_offset, ins->memory_address);
+			hardware.set_register(0, hardware.get_memory(ins->memory_address));
+			break;
 		default:
 			printf("Instruction not found...\n");
 			continue_eval = 0;
 			break;
+		}
+
+		for (int z = 0; z < 8; z+=2) {
+			printf("[%d] > %d\n", z, hardware.get_register(z));
 		}
 
 		// Check if instruction wants to change offset

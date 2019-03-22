@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "Hardware.h"
+#include "bin_utils.h"
 
 Hardware::Hardware()
 {
@@ -37,7 +38,7 @@ Register_page Hardware::create_register_page()
 
 Flag_page Hardware::create_flag_page()
 {
-	Byte *flag_page = (Byte *) calloc(NUM_FLAGS/BITS_B, sizeof(Byte));
+	Byte *flag_page = (Byte *) calloc(FLAG_ARRAY_SIZE, sizeof(Byte));
 	if (!flag_page)
 		return NULL;
 
@@ -119,7 +120,8 @@ Status Hardware::set_flag(Word flag_index, Byte new_value)
 	if (flag_index >= NUM_FLAGS)
 		return ERROR;
 
-	flag_page[flag_index] = new_value;
+	flag_page[flag_index / FLAG_ARRAY_SIZE] = 
+		(new_value == 0) ? 0 : 1;
 
 	return OK;
 }
@@ -129,13 +131,13 @@ Word Hardware::get_flag(Word flag_index)
 	if (flag_index >= NUM_FLAGS)
 		return ERROR;
 
-	return flag_page[flag_index];
+	return flag_page[flag_index / FLAG_ARRAY_SIZE];
 }
 
 
 void Hardware::print_register(Word register_index)
 {
-	printf("0x%.2x\n", get_register(register_index));
+	printf("0x%.4x\n", get_register(register_index));
 }
 
 void Hardware::print_memory(Word memory_index)
