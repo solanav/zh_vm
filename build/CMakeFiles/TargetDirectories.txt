@@ -1,8 +1,0 @@
-/home/zh/Projects/zh_vm/build/CMakeFiles/rebuild_cache.dir
-/home/zh/Projects/zh_vm/build/CMakeFiles/edit_cache.dir
-/home/zh/Projects/zh_vm/build/zh_vm/CMakeFiles/rebuild_cache.dir
-/home/zh/Projects/zh_vm/build/zh_vm/CMakeFiles/bin_utils.dir
-/home/zh/Projects/zh_vm/build/zh_vm/CMakeFiles/Hardware.dir
-/home/zh/Projects/zh_vm/build/zh_vm/CMakeFiles/Processor.dir
-/home/zh/Projects/zh_vm/build/zh_vm/CMakeFiles/core.dir
-/home/zh/Projects/zh_vm/build/zh_vm/CMakeFiles/edit_cache.dir

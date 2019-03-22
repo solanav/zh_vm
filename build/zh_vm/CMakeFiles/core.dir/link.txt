@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/core.dir/core.cpp.o  -o core libbin_utils.a libHardware.a libProcessor.a 
