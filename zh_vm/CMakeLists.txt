@@ -11,7 +11,7 @@ add_library(Processor Processor.cpp Processor.h)
 target_include_directories(types INTERFACE ./)
 
 add_executable (core core.cpp)
-target_link_libraries(core bin_utils Hardware Processor types)
+target_link_libraries(core Hardware Processor bin_utils types)
 
 if(MSVC)
 	target_compile_options(core PRIVATE /W4 /WX)
