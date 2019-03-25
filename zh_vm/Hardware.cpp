@@ -24,7 +24,7 @@ Hardware::Hardware()
 
 Memory_page Hardware::create_memory_page()
 {
-	Byte *memory_page = (Byte *) calloc(PAGE_SIZE, sizeof(Byte));
+	Byte *memory_page = (Byte *)calloc(PAGE_SIZE, sizeof(Byte));
 	if (!memory_page)
 		return NULL;
 
@@ -33,7 +33,7 @@ Memory_page Hardware::create_memory_page()
 
 Register_page Hardware::create_register_page()
 {
-	Byte *register_page = (Byte *) calloc(NUM_REGS, sizeof(Byte) * 2);
+	Byte *register_page = (Byte *)calloc(NUM_REGS, sizeof(Byte) * 2);
 	if (!register_page)
 		return NULL;
 
@@ -42,7 +42,7 @@ Register_page Hardware::create_register_page()
 
 Flag_page Hardware::create_flag_page()
 {
-	Byte *flag_page = (Byte *) calloc(FLAG_ARRAY_SIZE, sizeof(Byte));
+	Byte *flag_page = (Byte *)calloc(FLAG_ARRAY_SIZE, sizeof(Byte));
 	if (!flag_page)
 		return NULL;
 
