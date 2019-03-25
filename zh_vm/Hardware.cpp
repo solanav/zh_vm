@@ -9,6 +9,10 @@ Hardware::Hardware()
 	memory_page = Hardware::create_memory_page();
 	list_memory_pages.push_back(memory_page);
 
+	// Create initial stack
+	stack = Hardware::create_stack();
+	list_stacks.push_back(stack);
+
 	// Create registers
 	register_page = Hardware::create_register_page();
 	list_register_pages.push_back(register_page);
@@ -43,6 +47,15 @@ Flag_page Hardware::create_flag_page()
 		return NULL;
 
 	return flag_page;
+}
+
+Stack Hardware::create_stack()
+{
+	Byte *stack = (Byte *)calloc(STACK_SIZE, sizeof(Byte));
+	if (!stack)
+		return NULL;
+
+	return stack;
 }
 
 Status Hardware::set_register(Word register_index, Byte new_value)
@@ -146,6 +159,29 @@ Word Hardware::get_flag(Word flag_index)
 	return get_bit(flag_page[byte], bit);
 }
 
+Status Hardware::set_stack(Word stack_index, Word new_value)
+{
+	Byte high, low;
+
+	if (stack_index >= PAGE_SIZE)
+		return ERROR;
+
+	high = new_value / 0x100;
+	low = new_value % 0x100;
+
+	stack[stack_index] = high;
+	stack[stack_index + 1] = low;
+
+	return OK;
+}
+
+Word Hardware::get_stack(Word stack_index)
+{
+	if (stack_index >= PAGE_SIZE)
+		return ERROR;
+
+	return stack[stack_index] * 0x100 + stack[stack_index + 1];
+}
 
 void Hardware::print_register(Word register_index)
 {
@@ -160,4 +196,9 @@ void Hardware::print_memory(Word memory_index)
 void Hardware::print_flag(Word flag_index)
 {
 	printf("0x%x\n", get_flag(flag_index));
+}
+
+void Hardware::print_stack(Word stack_index)
+{
+	printf("0x%.4x\n", get_stack(stack_index));
 }
