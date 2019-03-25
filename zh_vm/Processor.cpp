@@ -39,6 +39,35 @@ int bin_to_dec(unsigned char *bin, size_t size)
 	return result;
 }
 
+Instruction *load_instruction(int pc_offset, unsigned char *program)
+{
+	int load_offset;
+	unsigned char tmp[INS_SIZE];
+
+	struct Instruction *ins;
+
+	ins = (struct Instruction *) calloc(1, sizeof(struct Instruction));
+	if (!program || !ins)
+		return ERROR;
+
+	load_offset = pc_offset;
+	memcpy(tmp, program + load_offset, INS_ID_SIZE);
+	ins->instruction_id = bin_to_dec(tmp, INS_ID_SIZE);
+
+	load_offset += INS_ID_SIZE;
+	memcpy(tmp, program + load_offset, INS_OP0_SIZE);
+	ins->op0 = bin_to_dec(tmp, INS_OP0_SIZE);
+
+	memcpy(tmp, program + load_offset, INS_ADDR_SIZE);
+	ins->memory_address = bin_to_dec(tmp, INS_ADDR_SIZE);
+
+	load_offset += INS_OP0_SIZE;
+	memcpy(tmp, program + load_offset, INS_OP1_SIZE);
+	ins->op1 = bin_to_dec(tmp, INS_OP1_SIZE);
+
+	return ins;
+}
+
 Processor::Processor(Hardware assigned_hardware)
 {
 	hardware = assigned_hardware;
@@ -46,73 +75,58 @@ Processor::Processor(Hardware assigned_hardware)
 
 Status Processor::eval(unsigned char *program, size_t size)
 {
-	int instruction_offset = 0, offset = 0, continue_eval = OK, new_offset = -1;
-	struct Instruction *ins;
-	unsigned char tmp[INS_SIZE];
+	Instruction *ins;
+	int pc_offset = 0;
+	int load_offset = 0;
+	int jmp_offset = -1;
+	int isa_selected = 0;
+	int continue_eval = OK;
 
-	ins = (struct Instruction *) calloc(1, sizeof(struct Instruction));
-	if (!program || !ins)
-		return ERROR;
-
-	instruction_offset = 0;
+	pc_offset = 0;
 	while (continue_eval) {
-		// Load next instruction
-		offset = instruction_offset;
-		memcpy(tmp, program + offset, INS_ID_SIZE);
-		ins->instruction_id = bin_to_dec(tmp, INS_ID_SIZE);
+		ins = load_instruction(pc_offset, program);
 
-		offset += INS_ID_SIZE;
-		memcpy(tmp, program + offset, INS_OP0_SIZE);
-		ins->op0 = bin_to_dec(tmp, INS_OP0_SIZE);
-
-		memcpy(tmp, program + offset, INS_ADDR_SIZE);
-		ins->memory_address = bin_to_dec(tmp, INS_ADDR_SIZE);
-
-		offset += INS_OP0_SIZE;
-		memcpy(tmp, program + offset, INS_OP1_SIZE);
-		ins->op1 = bin_to_dec(tmp, INS_OP1_SIZE);
-
-		// Reset offset set by last instruction
-		new_offset = -1;
+		// Reset load_offset set by last instruction
+		jmp_offset = -1;
 
 		// Evaluate instruction
-		switch (ins->instruction_id)
+		switch (ins->instruction_id + (isa_selected * INS_SIZE))
 		{
 		case 0:
-			printf(ADDR_STR "exit\n", instruction_offset);
+			printf(ADDR_STR "exit\n", pc_offset);
 			continue_eval = ERROR;
 			break;
 		case 1:
-			printf(ADDR_STR "movr %d, %d\n", instruction_offset, ins->op0, ins->op1);
+			printf(ADDR_STR "movr %d, %d\n", pc_offset, ins->op0, ins->op1);
 			hardware.set_register(ins->op0, hardware.get_register(ins->op1));
 			break;
 		case 2:
-			printf(ADDR_STR "movi %d, %d\n", instruction_offset, ins->op0, ins->op1);
+			printf(ADDR_STR "movi %d, %d\n", pc_offset, ins->op0, ins->op1);
 			hardware.set_register(ins->op0, ins->op1);
 			break;
 		case 3:
-			printf(ADDR_STR "addr %d, %d\n", instruction_offset, ins->op0, ins->op1);
+			printf(ADDR_STR "addr %d, %d\n", pc_offset, ins->op0, ins->op1);
 			hardware.set_register(ins->op0, hardware.get_register(ins->op0) + hardware.get_register(ins->op1));
 			break;
 		case 4:
-			printf(ADDR_STR "addi %d, %d [%d]\n", instruction_offset, ins->op0, ins->op1, hardware.get_register(ins->op0));
+			printf(ADDR_STR "addi %d, %d [%d]\n", pc_offset, ins->op0, ins->op1, hardware.get_register(ins->op0));
 			hardware.set_register(ins->op0, hardware.get_register(ins->op0) + ins->op1);
 			break;
 		case 5:
-			printf(ADDR_STR "subr %d, %d\n", instruction_offset, ins->op0, ins->op1);
+			printf(ADDR_STR "subr %d, %d\n", pc_offset, ins->op0, ins->op1);
 			hardware.set_register(ins->op0, hardware.get_register(ins->op0) - hardware.get_register(ins->op1));
 			break;
 		case 6:
-			printf(ADDR_STR "subi %d, %d\n", instruction_offset, ins->op0, ins->op1);
+			printf(ADDR_STR "subi %d, %d\n", pc_offset, ins->op0, ins->op1);
 			hardware.set_register(ins->op0, hardware.get_register(ins->op0) - ins->op1);
 			break;
 		case 7:
-			printf(ADDR_STR "jmp %x\n", instruction_offset, ins->memory_address);
-			new_offset = ins->memory_address;
+			printf(ADDR_STR "jmp %x\n", pc_offset, ins->memory_address);
+			jmp_offset = ins->memory_address;
 			break;
 		case 8:
 			printf(ADDR_STR "cmp %d %d [%d - %d]\n", 
-				instruction_offset, 
+				pc_offset, 
 				ins->op0, ins->op1, 
 				hardware.get_register(ins->op0), 
 				hardware.get_register(ins->op1));
@@ -130,27 +144,43 @@ Status Processor::eval(unsigned char *program, size_t size)
 			}
 			break;
 		case 9:
-			printf(ADDR_STR "ja %x\n", instruction_offset, ins->memory_address);
+			printf(ADDR_STR "ja %x\n", pc_offset, ins->memory_address);
 			if (hardware.get_flag(1) == 0 && hardware.get_flag(0) != 1)
-				new_offset = ins->memory_address;
+				jmp_offset = ins->memory_address;
 			break;
 		case 10:
-			printf(ADDR_STR "jb %x\n", instruction_offset, ins->memory_address);
+			printf(ADDR_STR "jb %x\n", pc_offset, ins->memory_address);
 			if (hardware.get_flag(1) == 1 && hardware.get_flag(0) != 1)
-				new_offset = ins->memory_address;
+				jmp_offset = ins->memory_address;
 			break;
 		case 11:
-			printf(ADDR_STR "je %x\n", instruction_offset, ins->memory_address);
+			printf(ADDR_STR "je %x\n", pc_offset, ins->memory_address);
 			if (hardware.get_flag(0) == 1)
-				new_offset = ins->memory_address;
+				jmp_offset = ins->memory_address;
 			break;
 		case 12:
-			printf(ADDR_STR "wr %x (ra)\n", instruction_offset, ins->memory_address);
+			printf(ADDR_STR "wr %x (ra)\n", pc_offset, ins->memory_address);
 			hardware.set_memory(ins->memory_address, hardware.get_register(0));
 			break;
 		case 13:
-			printf(ADDR_STR "re (ra) %x\n", instruction_offset, ins->memory_address);
+			printf(ADDR_STR "re (ra) %x\n", pc_offset, ins->memory_address);
 			hardware.set_register(0, hardware.get_memory(ins->memory_address));
+			break;
+		case 14:
+			printf(ADDR_STR "push %x %x\n", pc_offset, ins->op0, ins->op1);
+			hardware.set_stack(ins->op0, hardware.get_register(ins->op1));
+			break;
+		case 15:
+			printf(ADDR_STR "isa %x\n", pc_offset, ins->memory_address);
+			isa_selected = ins->memory_address;
+			break;
+		case 16:
+			printf(ADDR_STR "pop %x %x\n", pc_offset, ins->op0, ins->op1);
+			hardware.set_register(ins->op0, hardware.get_stack(ins->op1));
+			break;
+		case 31:
+			printf(ADDR_STR "isa %x\n", pc_offset, ins->memory_address);
+			isa_selected = ins->memory_address;
 			break;
 		default:
 			printf("Instruction not found...\n");
@@ -158,15 +188,15 @@ Status Processor::eval(unsigned char *program, size_t size)
 			break;
 		}
 
-		for (int z = 0; z < 8; z+=2) {
-			printf("[%d] > %d\n", z, hardware.get_register(z));
-		}
+		printf(">> %.4x\n", hardware.get_register(0));
+		printf(">> %.4x\n", hardware.get_register(2));
+		printf(">> %.4x\n", hardware.get_register(4));
 
-		// Check if instruction wants to change offset
-		if (new_offset == -1)
-			instruction_offset += INS_SIZE;
+		// Check if instruction wants to change load_offset
+		if (jmp_offset == -1)
+			pc_offset += INS_SIZE;
 		else
-			instruction_offset = new_offset;
+			pc_offset = jmp_offset;
 #ifdef _WIN32
 		Sleep(1000);
 #endif
