@@ -184,6 +184,22 @@ Status Processor::eval(unsigned char *program, size_t size)
 			printf(ADDR_STR "pop %x %x\n", pc_offset, ins->op0, ins->op1);
 			hardware.set_register(ins->op0, hardware.get_stack(ins->op1));
 			break;
+		case 18:
+			printf(ADDR_STR "xor %x %x\n", pc_offset, ins->op0, ins->op1);
+			hardware.set_register(ins->op0, hardware.get_register(ins->op0) ^ hardware.get_register(ins->op0));
+			break;
+		case 19:
+			printf(ADDR_STR "and %x %x\n", pc_offset, ins->op0, ins->op1);
+			hardware.set_register(ins->op0, hardware.get_register(ins->op0) & hardware.get_register(ins->op0));
+			break;
+		case 20:
+			printf(ADDR_STR "or %x %x\n", pc_offset, ins->op0, ins->op1);
+			hardware.set_register(ins->op0, hardware.get_register(ins->op0) | hardware.get_register(ins->op0));
+			break;
+		case 21:
+			printf(ADDR_STR "not %x\n", pc_offset, ins->op0, ins->op1);
+			hardware.set_register(ins->op0, ~hardware.get_register(ins->memory_address));
+			break;
 		case 31:
 			printf(ADDR_STR "isa %x\n", pc_offset, ins->memory_address);
 			isa_selected = ins->memory_address;
