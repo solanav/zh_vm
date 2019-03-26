@@ -93,8 +93,7 @@ Status Processor::eval(unsigned char *program, size_t size)
 		switch (ins->instruction_id + (isa_selected * INS_SIZE))
 		{
 		case 0:
-			printf(ADDR_STR "exit\n", pc_offset);
-			continue_eval = ERROR;
+			printf(ADDR_STR "nop\n", pc_offset);
 			break;
 		case 1:
 			printf(ADDR_STR "movr %d, %d\n", pc_offset, ins->op0, ins->op1);
@@ -170,14 +169,18 @@ Status Processor::eval(unsigned char *program, size_t size)
 			hardware.set_register(0, hardware.get_memory(ins->memory_address));
 			break;
 		case 14:
-			printf(ADDR_STR "push %x %x\n", pc_offset, ins->op0, ins->op1);
-			hardware.set_stack(ins->op0, hardware.get_register(ins->op1));
+			printf(ADDR_STR "exit\n", pc_offset);
+			continue_eval = ERROR;
 			break;
 		case 15:
 			printf(ADDR_STR "isa %x\n", pc_offset, ins->memory_address);
 			isa_selected = ins->memory_address;
 			break;
 		case 16:
+			printf(ADDR_STR "push %x %x\n", pc_offset, ins->op0, ins->op1);
+			hardware.set_stack(ins->op0, hardware.get_register(ins->op1));
+			break;
+		case 17:
 			printf(ADDR_STR "pop %x %x\n", pc_offset, ins->op0, ins->op1);
 			hardware.set_register(ins->op0, hardware.get_stack(ins->op1));
 			break;
