@@ -15,12 +15,6 @@ int main()
 
 	processor.eval(program, sizeof(program));
 	
-	//hardware.set_register(0, (Byte)0x1);
-	//hardware.set_register(1, (Byte)0x1);
-
-	hardware.print_register(0);
-	hardware.print_register(2);
-	
 #ifdef _WIN32
 	getchar();
 #endif
