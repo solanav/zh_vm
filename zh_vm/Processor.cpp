@@ -102,7 +102,10 @@ Status Processor::eval(unsigned char *program, size_t size)
 			break;
 		case 2:
 			printf(ADDR_STR "movi %d, %d\n", pc_offset, ins->op0, ins->op1);
-			hardware.set_register(ins->op0, ins->op1);
+			if (ins->op1 <= 0xFF)
+				hardware.set_register(ins->op0, (Byte)ins->op1);
+			else 
+				hardware.set_register(ins->op0, (Word)ins->op1);
 			break;
 		case 3:
 			printf(ADDR_STR "addr %d, %d\n", pc_offset, ins->op0, ins->op1);
@@ -187,10 +190,6 @@ Status Processor::eval(unsigned char *program, size_t size)
 			continue_eval = 0;
 			break;
 		}
-
-		printf(">> %.4x\n", hardware.get_register(0));
-		printf(">> %.4x\n", hardware.get_register(2));
-		printf(">> %.4x\n", hardware.get_register(4));
 
 		// Check if instruction wants to change load_offset
 		if (jmp_offset == -1)
