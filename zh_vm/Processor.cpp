@@ -200,6 +200,14 @@ Status Processor::eval(unsigned char *program, size_t size)
 			printf(ADDR_STR "not %x\n", pc_offset, ins->op0, ins->op1);
 			hardware.set_register(ins->op0, ~hardware.get_register(ins->memory_address));
 			break;
+		case 22:
+			printf(ADDR_STR "mul %x %x\n", pc_offset, ins->op0, ins->op1);
+			hardware.set_register(ins->op0, hardware.get_register(ins->op0) * hardware.get_register(ins->op0));
+			break;
+		case 23:
+			printf(ADDR_STR "div %x %x\n", pc_offset, ins->op0, ins->op1);
+			hardware.set_register(ins->op0, hardware.get_register(ins->op0) / hardware.get_register(ins->op0));
+			break;
 		case 31:
 			printf(ADDR_STR "isa %x\n", pc_offset, ins->memory_address);
 			isa_selected = ins->memory_address;
