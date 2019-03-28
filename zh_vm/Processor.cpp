@@ -17,6 +17,13 @@
 
 #define ADDR_STR "[0x%.5x] "
 
+struct _Instruction {
+	unsigned int instruction_id : 4;
+	unsigned int op0 : 6;
+	unsigned int op1 : 6;
+	unsigned int memory_address : 12;
+};
+
 Instruction *Processor::load_instruction(int pc_offset, Word *program, Instruction *ins)
 {
 	if (!program || !ins)
