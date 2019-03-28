@@ -8,7 +8,7 @@ int main()
 {
 	Hardware hardware;
 	Processor processor(hardware);
-	unsigned char program[] =
+	/*unsigned char program[] =
 		"\x0\x0\x1\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x1" // Set ax to 0101
 		"\x0\x0\x1\x0\x0\x0\x0\x0\x0\x1\x0\x0\x0\x0\x0\x1"
 		"\x1\x1\x0\x0\x1\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0" // Write ax to 100000000000b
@@ -19,6 +19,20 @@ int main()
 		"\x0\x1\x0\x1\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0" // Do not with ax
 		"\x1\x1\x1\x1\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0" // Change to isa page 0
 		"\x1\x1\x1\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0\x0";
+	*/
+	
+	Word program[] = {
+		0b0010000000000001, // Set ax to 0101
+		0b0010000001000001,
+		0b1100100000000000, // Write ax to 100000000000b
+		0b0010000000000000, // Clear ax
+		0b0010000001000000,
+		0b1101100000000000, // Read 100000000000b to ax
+		0b1111000000000001, // Change to isa page 1
+		0b0101000000000000, // Do not with ax
+		0b1111000000000000, // Change to isa page 0
+		0b1110000000000000
+	};
 
 	processor.eval(program, sizeof(program));
 

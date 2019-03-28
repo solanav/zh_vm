@@ -8,6 +8,13 @@
 #define INS_OP1_SIZE 6
 #define INS_ADDR_SIZE 12
 
+struct Instruction {
+	unsigned int instruction_id : 4;
+	unsigned int op0 : 6;
+	unsigned int op1 : 6;
+	unsigned int memory_address : 12;
+};
+
 class Processor
 {
 private:
@@ -15,5 +22,6 @@ private:
 
 public:
 	Processor(Hardware hardware);
-	Status eval(unsigned char *program, size_t size);
+	Status eval(Word *program, size_t size);
+	Instruction *load_instruction(int pc_offset, Word *program, Instruction *ins);
 };

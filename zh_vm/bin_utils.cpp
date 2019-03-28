@@ -1,19 +1,20 @@
 #include <stdio.h>
 #include "bin_utils.h"
 
-Status set_bit(Byte *data, unsigned long i)
+Status set_bit(Word *data, unsigned long i)
 {
 	*data |= (1UL << i);
 	return OK;
 }
 
-Status clear_bit(Byte *data, unsigned long i)
+Status clear_bit(Word *data, unsigned long i)
 {
 	*data &= ~(1UL << i);
 	return OK;
 }
 
-Byte get_bit(Byte data, unsigned long i)
+Word get_bit(Word data, unsigned long i, unsigned long n)
 {
-	return ((1UL << i) & data) != 0;
+	unsigned long mask = ((1 << n) - 1) << i;
+	return (data & mask) >> i;
 }

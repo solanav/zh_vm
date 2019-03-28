@@ -1,9 +1,10 @@
 #pragma once
+#include <stdint.h>
 #include "types.h"
 
-typedef unsigned char Byte; // at least 1 byte
-typedef unsigned int Word; // at least 2 bytes
+typedef uint8_t Byte;
+typedef uint16_t Word;
 
-Status set_bit(Byte *data, unsigned long i);
-Status clear_bit(Byte *data, unsigned long i);
-Byte get_bit(Byte data, unsigned long i);
+Status set_bit(Word *data, unsigned long i);
+Status clear_bit(Word *data, unsigned long i);
+Word get_bit(Word data, unsigned long i, unsigned long n);

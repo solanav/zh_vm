@@ -131,7 +131,7 @@ Word Hardware::get_memory(Word memory_index)
 Status Hardware::set_flag(Word flag_index, Byte new_value)
 {
 	int bit, byte;
-	Byte tmp = 0;
+	Word tmp = 0;
 
 	if (flag_index >= NUM_FLAGS)
 		return ERROR;
@@ -156,7 +156,7 @@ Word Hardware::get_flag(Word flag_index)
 	byte = flag_index / 8;
 	bit = flag_index - (byte * 8);
 
-	return get_bit(flag_page[byte], bit);
+	return get_bit(flag_page[byte], bit, 1);
 }
 
 Status Hardware::set_stack(Word stack_index, Word new_value)
