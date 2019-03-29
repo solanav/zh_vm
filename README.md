@@ -1,6 +1,19 @@
 # Zh Virtual Machine
 Custom virtual machine / interpreter
 
+# Index
+
+* [Zh Virtual Machine](#zh-virtual-machine)
+  * [Characteristics](#characteristics)
+* [Instruction composition](#instruction-composition)
+  * [With 2 arguments](#with-2-arguments)
+  * [With 1 arguments](#with-1-arguments)
+  * [With 0 arguments](#with-0-arguments)
+* [ISA by pages](#isa-by-pages)
+  * [Page #0](#page-0)
+  * [Page #1](#page-1)
+* [Installation](#how-to-build-it)
+
 # Characteristics
 - 16 bit instruction
 - 64 KiB of memory per page
@@ -70,3 +83,22 @@ Custom virtual machine / interpreter
 | 0x1101 | 0    | NULL  |                    |
 | 0x1110 | 0    | NULL  |                    |
 | 0x1111 | 1    | ISA   | page number        |
+
+### How to build it
+
+* Linux with cmake
+```
+$ git clone https://github.com/solanav/zh_vm
+$ cd zh_vm
+$ mkdir build
+$ cmake ..
+$ make
+```
+
+* Windows with Visual Studio
+```
+1. Go to File > Open > Cmake
+2. Select CMakeLists.txt
+3. ?
+4. Profit
+```
