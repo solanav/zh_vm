@@ -24,17 +24,19 @@ struct _Instruction {
 	unsigned int memory_address : 12;
 };
 
-Instruction *Processor::load_instruction(int pc_offset, Word *program, Instruction *ins)
+Status Processor::load_instruction(Word program, Instruction *ins)
 {
-	if (!program || !ins)
+	if (!ins)
 		return ERROR;
 
-	ins->instruction_id = get_bit(program[pc_offset], INS_SIZE - 4, 4);
-	ins->op0 = get_bit(program[pc_offset], INS_SIZE - 10, 6);
-	ins->op1 = get_bit(program[pc_offset], INS_SIZE - 16, 6);
-	ins->memory_address = get_bit(program[pc_offset], INS_SIZE - 0, 12);
+	ins->instruction_id = get_bit(program, INS_SIZE - 4, 4);
+	ins->op0 = get_bit(program, INS_SIZE - 10, 6);
+	ins->op1 = get_bit(program, INS_SIZE - 16, 6);
+	ins->memory_address = get_bit(program, INS_SIZE - 16, 12);
 
-	return ins;
+	printf("Memory ADDR ? %d", ins->memory_address);
+
+	return OK;
 }
 
 Processor::Processor(Hardware assigned_hardware)
@@ -56,11 +58,21 @@ Status Processor::eval(Word *program, size_t size)
 		return ERROR;
 
 	// Load program into memory
-	printf(">> %d\n", size);
+	for (int i = 0; i < (size / 2); i++) {
+		printf("Writing > %x\n", program[i]);
+		hardware.set_memory(i * 2, program[i]);
+	}
+
+	for (int i = 0; i < 20; i+=2)
+		printf("\tTest %x\n", hardware.get_memory(i));
+	
+	getchar();
 
 	pc_offset = 0;
 	while (continue_eval) {
-		ins = load_instruction(pc_offset, program, ins);
+		// Get next instruction divided in nice parts
+		printf("[0x%.4x] < Reading this\n", hardware.get_memory(pc_offset));
+		load_instruction(hardware.get_memory(pc_offset), ins);
 
 		// Reset load_offset set by last instruction
 		jmp_offset = -1;
@@ -196,7 +208,7 @@ Status Processor::eval(Word *program, size_t size)
 
 		// Check if instruction wants to change load_offset
 		if (jmp_offset == -1)
-			pc_offset++;
+			pc_offset+=2;
 		else
 			pc_offset = jmp_offset;
 #ifdef _WIN32

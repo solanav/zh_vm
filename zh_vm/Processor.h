@@ -14,7 +14,7 @@ class Processor
 {
 private:
 	Hardware hardware;
-	Instruction *load_instruction(int pc_offset, Word *program, Instruction *ins);
+	Status load_instruction(Word program, Instruction *ins);
 
 public:
 	Processor(Hardware hardware);
