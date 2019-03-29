@@ -2,26 +2,71 @@
 Custom virtual machine / interpreter
 
 # Characteristics
+- 16 bit instruction
+- 64 KiB of memory per page
+- 65536 memory pages
+- 64 KiB of memory per stack
+- 65536 stacks
+- 64 registers of 16 bits each
+- 32 flags of 1 bit each
+
+# Instruction composition
+
+### With 2 arguments
+| ID     | OP0    | OP1    |
+|--------|--------|--------|
+| 4 bits | 6 bits | 6 bits |
+
+### With 1 arguments
+| ID     | OP0     |
+|--------|---------|
+| 4 bits | 12 bits |
+
+### With 0 arguments
+| ID     | NULL    |
+|--------|---------|
+| 4 bits | 12 bits |
 
 # ISA by pages
 
-### > Pages #0 and #1
+### Page #0
 
-| ID     | ARGV | NAME  |   | ID     | ARGV | NAME  |
-|--------|------|-------|---|--------|------|-------|
-| 0X0000 | 0    | NOP   |   | 0X0000 | 2    | push  |
-| 0X0001 | 2    | MOVR  |   | 0X0001 | 2    | pop   |
-| 0X0010 | 2    | MOVI  |   | 0X0010 | 1    | mul   |
-| 0X0011 | 2    | ADDR  |   | 0X0011 | 1    | div   |
-| 0X0100 | 2    | ADDI  |   | 0X0100 | 0    | null  |
-| 0X0101 | 2    | SUBR  |   | 0X0101 | 0    | null  |
-| 0X0110 | 2    | SUBI  |   | 0X0110 | 0    | null  |
-| 0X0111 | 1    | JMP   |   | 0X0111 | 0    | null  |
-| 0X1000 | 2    | CMP   |   | 0X1000 | 0    | null  |
-| 0X1001 | 1    | JA    |   | 0X1001 | 0    | null  |
-| 0X1010 | 1    | JB    |   | 0X1010 | 0    | null  |
-| 0X1011 | 1    | JE    |   | 0X1011 | 0    | null  |
-| 0X1100 | 1    | WR    |   | 0X1100 | 0    | null  |
-| 0X1101 | 1    | RE    |   | 0X1101 | 0    | null  |
-| 0X1110 | 0    | EXIT  |   | 0X1110 | 0    | null  |
-| 0X1111 | 1    | ISA   |   | 0X1111 | 1    | isa   |
+| ID     | ARGV | NAME  | ARGS               |
+|--------|------|-------|--------------------|
+| 0x0000 | 0    | NOP   |                    |
+| 0x0001 | 2    | MOVR  | destination, value |
+| 0x0010 | 2    | MOVI  | destination, value |
+| 0x0011 | 2    | ADDR  | destination, value |
+| 0x0100 | 2    | ADDI  | destination, value |
+| 0x0101 | 2    | SUBR  | destination, value |
+| 0x0110 | 2    | SUBI  | destination, value |
+| 0x0111 | 1    | JMP   | memory address     |
+| 0x1000 | 2    | CMP   | destination, value |
+| 0x1001 | 1    | JA    | memory address     |
+| 0x1010 | 1    | JB    | memory address     |
+| 0x1011 | 1    | JE    | memory address     |
+| 0x1100 | 1    | WR    | memory address     |
+| 0x1101 | 1    | RE    | memory address     |
+| 0x1110 | 0    | EXIT  |                    |
+| 0x1111 | 1    | ISA   | page number        |
+
+### Page #1
+
+| ID     | ARGV | NAME  | ARGS               |
+|--------|------|-------|--------------------|
+| 0x0000 | 2    | PUSH  | destination, value |
+| 0x0001 | 2    | POP   | destination, value |
+| 0x0010 | 1    | MUL   | destination, value |
+| 0x0011 | 1    | DIV   | destination, value |
+| 0x0100 | 0    | NULL  |                    |
+| 0x0101 | 0    | NULL  |                    |
+| 0x0110 | 0    | NULL  |                    |
+| 0x0111 | 0    | NULL  |                    |
+| 0x1000 | 0    | NULL  |                    |
+| 0x1001 | 0    | NULL  |                    |
+| 0x1010 | 0    | NULL  |                    |
+| 0x1011 | 0    | NULL  |                    |
+| 0x1100 | 0    | NULL  |                    |
+| 0x1101 | 0    | NULL  |                    |
+| 0x1110 | 0    | NULL  |                    |
+| 0x1111 | 1    | ISA   | page number        |
