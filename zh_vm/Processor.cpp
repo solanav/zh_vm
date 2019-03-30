@@ -34,8 +34,6 @@ Status Processor::load_instruction(Word program, Instruction *ins)
 	ins->op1 = get_bit(program, INS_SIZE - 16, 6);
 	ins->memory_address = get_bit(program, INS_SIZE - 16, 12);
 
-	printf("Memory ADDR ? %d", ins->memory_address);
-
 	return OK;
 }
 
@@ -59,14 +57,8 @@ Status Processor::eval(Word *program, size_t size)
 
 	// Load program into memory
 	for (int i = 0; i < (size / 2); i++) {
-		printf("Writing > %x\n", program[i]);
 		hardware.set_memory(i * 2, program[i]);
 	}
-
-	for (int i = 0; i < 20; i+=2)
-		printf("\tTest %x\n", hardware.get_memory(i));
-	
-	getchar();
 
 	pc_offset = 0;
 	while (continue_eval) {
@@ -78,7 +70,7 @@ Status Processor::eval(Word *program, size_t size)
 		jmp_offset = -1;
 
 		// Evaluate instruction
-		switch (ins->instruction_id + (isa_selected * 2))
+		switch (ins->instruction_id + (isa_selected * 16))
 		{
 		case 0:
 			printf(ADDR_STR "nop\n", pc_offset);
@@ -186,6 +178,7 @@ Status Processor::eval(Word *program, size_t size)
 			break;
 		case 21:
 			printf(ADDR_STR "not %x\n", pc_offset, ins->op0);
+			printf(">> %d\n", ~hardware.get_register(ins->memory_address));
 			hardware.set_register(ins->op0, (Word) (~hardware.get_register(ins->memory_address)));
 			break;
 		case 22:
@@ -211,13 +204,6 @@ Status Processor::eval(Word *program, size_t size)
 			pc_offset+=2;
 		else
 			pc_offset = jmp_offset;
-#ifdef _WIN32
-		//Sleep(1000);
-#endif
-
-#ifdef linux
-		//sleep(1);
-#endif
 	}
 
 	return OK;

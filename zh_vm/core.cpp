@@ -24,8 +24,10 @@ int main()
 
 	processor.eval(program, sizeof(program));
 
-	hardware.print_memory(0x800); // Print 100000000000b
-	hardware.print_register(0); // Print ax
+	// Should be 0101
+	hardware.print_memory(0x800);
+	// Should be fefe
+	hardware.print_register(0);
 
 #ifdef _WIN32
 	getchar();
