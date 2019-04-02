@@ -28,7 +28,7 @@ Custom virtual machine / interpreter
 ### With 2 arguments
 | ID     | OP0    | OP1    |
 |--------|--------|--------|
-| 4 bits | 6 bits | 6 bits |
+| 4 bits | 4 bits | 8 bits |
 
 ### With 1 arguments
 | ID     | OP0     |
