@@ -63,7 +63,6 @@ Status Processor::eval(Word *program, size_t size)
 	pc_offset = 0;
 	while (continue_eval) {
 		// Get next instruction divided in nice parts
-		printf("[0x%.4x] < Reading this\n", hardware.get_memory(pc_offset));
 		load_instruction(hardware.get_memory(pc_offset), ins);
 
 		// Reset load_offset set by last instruction
@@ -104,7 +103,7 @@ Status Processor::eval(Word *program, size_t size)
 			break;
 		case 7:
 			printf(ADDR_STR "jmp %x\n", pc_offset, ins->memory_address);
-			jmp_offset = ins->memory_address;
+			pc_offset = ins->memory_address - 2;
 			break;
 		case 8:
 			printf(ADDR_STR "cmp %d %d [%d - %d]\n", 
@@ -128,17 +127,17 @@ Status Processor::eval(Word *program, size_t size)
 		case 9:
 			printf(ADDR_STR "ja %x\n", pc_offset, ins->memory_address);
 			if (hardware.get_flag(1) == 0 && hardware.get_flag(0) != 1)
-				jmp_offset = ins->memory_address;
+				pc_offset = ins->memory_address - 2;
 			break;
 		case 10:
 			printf(ADDR_STR "jb %x\n", pc_offset, ins->memory_address);
 			if (hardware.get_flag(1) == 1 && hardware.get_flag(0) != 1)
-				jmp_offset = ins->memory_address;
+				pc_offset = ins->memory_address - 2;
 			break;
 		case 11:
 			printf(ADDR_STR "je %x\n", pc_offset, ins->memory_address);
 			if (hardware.get_flag(0) == 1)
-				jmp_offset = ins->memory_address;
+				pc_offset = ins->memory_address - 2;
 			break;
 		case 12:
 			printf(ADDR_STR "wr %x (ra)\n", pc_offset, ins->memory_address);
@@ -178,7 +177,6 @@ Status Processor::eval(Word *program, size_t size)
 			break;
 		case 21:
 			printf(ADDR_STR "not %x\n", pc_offset, ins->op0);
-			printf(">> %d\n", ~hardware.get_register(ins->memory_address));
 			hardware.set_register(ins->op0, (Word) (~hardware.get_register(ins->memory_address)));
 			break;
 		case 22:
@@ -188,6 +186,10 @@ Status Processor::eval(Word *program, size_t size)
 		case 23:
 			printf(ADDR_STR "div %x %x\n", pc_offset, ins->op0, ins->op1);
 			hardware.set_register(ins->op0, (Word) (hardware.get_register(ins->op0) / hardware.get_register(ins->op0)));
+			break;
+		case 24:
+			printf(ADDR_STR "jmpr %x\n", pc_offset, ins->memory_address);
+			pc_offset += ins->memory_address - 2;
 			break;
 		case 31:
 			printf(ADDR_STR "isa %x\n", pc_offset, ins->memory_address);
@@ -199,11 +201,8 @@ Status Processor::eval(Word *program, size_t size)
 			break;
 		}
 
-		// Check if instruction wants to change load_offset
-		if (jmp_offset == -1)
-			pc_offset+=2;
-		else
-			pc_offset = jmp_offset;
+		// Move pc to next instruction
+		pc_offset += 2;
 	}
 
 	return OK;
