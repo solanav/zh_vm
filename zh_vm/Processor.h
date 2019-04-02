@@ -14,7 +14,6 @@ class Processor
 {
 private:
 	Hardware hardware;
-	Status load_instruction(Word program, Instruction *ins);
 
 public:
 	Processor(Hardware hardware);

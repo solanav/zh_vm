@@ -24,7 +24,7 @@ struct _Instruction {
 	unsigned int memory_address : 12;
 };
 
-Status Processor::load_instruction(Word program, Instruction *ins)
+Status load_instruction(Word program, Instruction *ins)
 {
 	if (!ins)
 		return ERROR;
@@ -35,6 +35,20 @@ Status Processor::load_instruction(Word program, Instruction *ins)
 	ins->memory_address = get_bit(program, INS_SIZE - 16, 12);
 
 	return OK;
+}
+
+Status syscall(Word call_id)
+{
+	printf("[Start of father control]\n");
+	switch (call_id) {
+	case 0:
+		printf("Test\n");
+		break;
+	default:
+		printf("[ERROR] Syscall not found");
+		return ERROR;
+	}
+	printf("[End of father control]\n");
 }
 
 Processor::Processor(Hardware assigned_hardware)
@@ -63,7 +77,8 @@ Status Processor::eval(Word *program, size_t size)
 	pc_offset = 0;
 	while (continue_eval) {
 		// Get next instruction divided in nice parts
-		load_instruction(hardware.get_memory(pc_offset), ins);
+		if (load_instruction(hardware.get_memory(pc_offset), ins) == ERROR)
+			return ERROR;
 
 		// Reset load_offset set by last instruction
 		jmp_offset = -1;
@@ -191,6 +206,9 @@ Status Processor::eval(Word *program, size_t size)
 			printf(ADDR_STR "jmpr %x\n", pc_offset, ins->memory_address);
 			pc_offset += ins->memory_address - 2;
 			break;
+		case 25:
+			printf(ADDR_STR "sc %x\n", ins->memory_address);
+			syscall(ins->memory_address);
 		case 31:
 			printf(ADDR_STR "isa %x\n", pc_offset, ins->memory_address);
 			isa_selected = ins->memory_address;
