@@ -14,6 +14,7 @@ class Processor
 {
 private:
 	Hardware hardware;
+	Status system_call(Word call_id);
 
 public:
 	Processor(Hardware hardware);
