@@ -33,7 +33,7 @@ Memory_page Hardware::create_memory_page()
 
 Register_page Hardware::create_register_page()
 {
-	Byte *register_page = (Byte *)calloc(NUM_REGS, sizeof(Byte) * 2);
+	Byte *register_page = (Byte *)calloc(NUM_REGS * 2, sizeof(Byte));
 	if (!register_page)
 		return NULL;
 
@@ -58,43 +58,45 @@ Stack Hardware::create_stack()
 	return stack;
 }
 
-Status Hardware::set_register(Word register_index, Byte new_value)
-{
-	if (register_index >= NUM_REGS)
-		return ERROR;
-
-	register_page[register_index] = new_value;
-	return OK;
-}
-
-Status Hardware::set_register(Word register_index, Word new_value)
+Status Hardware::set_register(unsigned long register_index, Word new_value)
 {
 	Byte high, low;
 
 	if (register_index >= NUM_REGS)
 		return ERROR;
 
-	high = new_value / 0x100;
-	low = new_value % 0x100;
+	if (register_index % 3) { 
+		// Full register
+		high = new_value / 0x100;
+		low = new_value % 0x100;
 
-	register_page[register_index] = high;
-	register_page[register_index + 1] = low;
+		register_page[register_index] = high;
+		register_page[register_index + 1] = low;
+	}
+	else {
+		// Half register
+		register_page[register_index] = new_value;
+	}
 
 	return OK;
 }
 
-Word Hardware::get_register(Word register_index)
+Word Hardware::get_register(unsigned long register_index)
 {
 	if (register_index >= NUM_REGS)
 		return ERROR;
 
-	if (register_index % 2 == 0)
+	if (register_index % 3) {
+		// Full register
 		return register_page[register_index] * 0x100 + register_page[register_index + 1];
-
-	return register_page[register_index];
+	}
+	else {
+		// Half register
+		return register_page[register_index];
+	}
 }
 
-Status Hardware::set_memory(Word memory_index, Byte new_value)
+Status Hardware::set_memory(unsigned long memory_index, Byte new_value)
 {
 	if (memory_index >= PAGE_SIZE)
 		return ERROR;
@@ -104,7 +106,7 @@ Status Hardware::set_memory(Word memory_index, Byte new_value)
 	return OK;
 }
 
-Status Hardware::set_memory(Word memory_index, Word new_value)
+Status Hardware::set_memory(unsigned long memory_index, Word new_value)
 {
 	Byte high, low;
 
@@ -120,7 +122,7 @@ Status Hardware::set_memory(Word memory_index, Word new_value)
 	return OK;
 }
 
-Word Hardware::get_memory(Word memory_index)
+Word Hardware::get_memory(unsigned long memory_index)
 {
 	if (memory_index >= PAGE_SIZE)
 		return ERROR;
@@ -128,7 +130,7 @@ Word Hardware::get_memory(Word memory_index)
 	return memory_page[memory_index] * 0x100 + memory_page[memory_index + 1];
 }
 
-Status Hardware::set_flag(Word flag_index, Byte new_value)
+Status Hardware::set_flag(unsigned long flag_index, Byte new_value)
 {
 	int bit, byte;
 	Word tmp = 0;
@@ -146,7 +148,7 @@ Status Hardware::set_flag(Word flag_index, Byte new_value)
 	return OK;
 }
 
-Word Hardware::get_flag(Word flag_index)
+Word Hardware::get_flag(unsigned long flag_index)
 {
 	int bit, byte;
 
@@ -159,7 +161,7 @@ Word Hardware::get_flag(Word flag_index)
 	return get_bit(flag_page[byte], bit, 1);
 }
 
-Status Hardware::set_stack(Word stack_index, Word new_value)
+Status Hardware::set_stack(unsigned long stack_index, Word new_value)
 {
 	Byte high, low;
 
@@ -175,7 +177,7 @@ Status Hardware::set_stack(Word stack_index, Word new_value)
 	return OK;
 }
 
-Word Hardware::get_stack(Word stack_index)
+Word Hardware::get_stack(unsigned long stack_index)
 {
 	if (stack_index >= PAGE_SIZE)
 		return ERROR;
@@ -183,22 +185,22 @@ Word Hardware::get_stack(Word stack_index)
 	return stack[stack_index] * 0x100 + stack[stack_index + 1];
 }
 
-void Hardware::print_register(Word register_index)
+void Hardware::print_register(unsigned long register_index)
 {
 	printf("0x%.4x\n", get_register(register_index));
 }
 
-void Hardware::print_memory(Word memory_index)
+void Hardware::print_memory(unsigned long memory_index)
 {
 	printf("0x%.4x\n", get_memory(memory_index));
 }
 
-void Hardware::print_flag(Word flag_index)
+void Hardware::print_flag(unsigned long flag_index)
 {
 	printf("0x%x\n", get_flag(flag_index));
 }
 
-void Hardware::print_stack(Word stack_index)
+void Hardware::print_stack(unsigned long stack_index)
 {
 	printf("0x%.4x\n", get_stack(stack_index));
 }

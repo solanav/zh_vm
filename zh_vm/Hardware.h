@@ -51,24 +51,23 @@ public:
 	Flag_page create_flag_page();
 	Stack create_stack();
 
-	Status set_register(Word register_index, Byte new_value);
-	Status set_register(Word register_index, Word new_value);
-	Word get_register(Word register_index);
+	Status set_register(unsigned long register_index, Word new_value);
+	Word get_register(unsigned long register_index);
 
-	Status set_memory(Word memory_index, Byte new_value);
-	Status set_memory(Word memory_index, Word new_value);
-	Word get_memory(Word memory_index);
+	Status set_memory(unsigned long memory_index, Byte new_value);
+	Status set_memory(unsigned long memory_index, Word new_value);
+	Word get_memory(unsigned long memory_index);
 
-	Status set_flag(Word flag_index, Byte new_value);
-	Word get_flag(Word flag_index);
+	Status set_flag(unsigned long flag_index, Byte new_value);
+	Word get_flag(unsigned long flag_index);
 
-	Status set_stack(Word stack_index, Word new_value);
-	Word get_stack(Word stack_index);
+	Status set_stack(unsigned long stack_index, Word new_value);
+	Word get_stack(unsigned long stack_index);
 
 	// Debug
-	void print_register(Word register_index);
-	void print_memory(Word memory_index);
-	void print_flag(Word flag_index);
-	void print_stack(Word flag_index);
+	void print_register(unsigned long register_index);
+	void print_memory(unsigned long memory_index);
+	void print_flag(unsigned long flag_index);
+	void print_stack(unsigned long flag_index);
 };
 

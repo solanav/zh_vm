@@ -11,7 +11,7 @@ std::vector<Word> read_program_file(std::string file_name)
 	std::ifstream input(file_name, std::ios::binary);
 	char buffer[2];
 
-	for (size_t i = 0; i < 1024; i += 2)
+	for (size_t i = 0; ; i += 2)
 	{
 		input.read(buffer, sizeof(buffer));
 
@@ -35,8 +35,10 @@ int main(int argc, char *argv[])
 	Processor processor(hardware);
 
 	if (argc < 2) {
-		printf("[ERROR] Please introduce the file path as first parameter... [%s]\n", argv[0]);
+		printf("[ERROR] Please introduce the file path as first parameter...\n");
+#ifdef _WIN32
 		getchar();
+#endif
 		return ERROR;
 	}
 
