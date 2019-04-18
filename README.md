@@ -91,6 +91,7 @@ Custom virtual machine / interpreter
 $ git clone https://github.com/solanav/zh_vm
 $ cd zh_vm
 $ mkdir build
+$ cd build
 $ cmake ..
 $ make
 ```
