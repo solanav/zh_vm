@@ -70,7 +70,7 @@ Status Processor::eval(Word *program, size_t size)
 		return ERROR;
 
 	// Load program into memory
-	for (int i = 0; i < (size / 2); i++) {
+	for (int i = 0; i < size; i++) {
 		hardware.set_memory(i * 2, program[i]);
 	}
 
@@ -78,7 +78,7 @@ Status Processor::eval(Word *program, size_t size)
 	while (continue_eval) {
 		// Get next instruction divided in nice parts
 		if (load_instruction(hardware.get_memory(pc_offset), ins) ==
-		    ERROR)
+			ERROR)
 			return ERROR;
 
 		// Reset load_offset set by last instruction
@@ -91,14 +91,14 @@ Status Processor::eval(Word *program, size_t size)
 			break;
 		case 1:
 			printf(ADDR_STR "movr %d, %d\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			hardware.set_register(
 				ins->op0,
 				(Word)hardware.get_register(ins->op1));
 			break;
 		case 2:
 			printf(ADDR_STR "movi %d, %d\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			if (ins->op1 <= 0xFF)
 				hardware.set_register(ins->op0, (Byte)ins->op1);
 			else
@@ -106,92 +106,94 @@ Status Processor::eval(Word *program, size_t size)
 			break;
 		case 3:
 			printf(ADDR_STR "addr %d, %d\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			hardware.set_register(
 				ins->op0,
 				(Word)(hardware.get_register(ins->op0) +
-				       hardware.get_register(ins->op1)));
+					hardware.get_register(ins->op1)));
 			break;
 		case 4:
 			printf(ADDR_STR "addi %d, %d [%d]\n", pc_offset,
-			       ins->op0, ins->op1,
-			       hardware.get_register(ins->op0));
+				ins->op0, ins->op1,
+				hardware.get_register(ins->op0));
 			hardware.set_register(
 				ins->op0,
 				(Word)(hardware.get_register(ins->op0) +
-				       ins->op1));
+					ins->op1));
 			break;
 		case 5:
 			printf(ADDR_STR "subr %d, %d\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			hardware.set_register(
 				ins->op0,
 				(Word)(hardware.get_register(ins->op0) -
-				       hardware.get_register(ins->op1)));
+					hardware.get_register(ins->op1)));
 			break;
 		case 6:
 			printf(ADDR_STR "subi %d, %d\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			hardware.set_register(
 				ins->op0,
 				(Word)(hardware.get_register(ins->op0) -
-				       ins->op1));
+					ins->op1));
 			break;
 		case 7:
 			printf(ADDR_STR "jmp %x\n", pc_offset,
-			       ins->memory_address);
+				ins->memory_address);
 			pc_offset = ins->memory_address - 2;
 			break;
 		case 8:
 			printf(ADDR_STR "cmp %d %d [%d - %d]\n", pc_offset,
-			       ins->op0, ins->op1,
-			       hardware.get_register(ins->op0),
-			       hardware.get_register(ins->op1));
+				ins->op0, ins->op1,
+				hardware.get_register(ins->op0),
+				hardware.get_register(ins->op1));
 
 			if (hardware.get_register(ins->op0) ==
-			    hardware.get_register(ins->op1)) {
+				hardware.get_register(ins->op1)) {
 				hardware.set_flag(0, 1);
-			} else if (hardware.get_register(ins->op0) >
-				   hardware.get_register(ins->op1)) {
+			}
+			else if (hardware.get_register(ins->op0) >
+				hardware.get_register(ins->op1)) {
 				hardware.set_flag(0, 0);
 				hardware.set_flag(1, 0);
-			} else if (hardware.get_register(ins->op0) <
-				   hardware.get_register(ins->op1)) {
+			}
+			else if (hardware.get_register(ins->op0) <
+				hardware.get_register(ins->op1)) {
 				hardware.set_flag(0, 0);
 				hardware.set_flag(1, 1);
 			}
 			break;
 		case 9:
 			printf(ADDR_STR "ja %x\n", pc_offset,
-			       ins->memory_address);
+				ins->memory_address);
 			if (hardware.get_flag(1) == 0 &&
-			    hardware.get_flag(0) != 1)
+				hardware.get_flag(0) != 1)
 				pc_offset = ins->memory_address - 2;
 			break;
 		case 10:
 			printf(ADDR_STR "jb %x\n", pc_offset,
-			       ins->memory_address);
+				ins->memory_address);
 			if (hardware.get_flag(1) == 1 &&
-			    hardware.get_flag(0) != 1)
+				hardware.get_flag(0) != 1)
 				pc_offset = ins->memory_address - 2;
 			break;
 		case 11:
 			printf(ADDR_STR "je %x\n", pc_offset,
-			       ins->memory_address);
+				ins->memory_address);
 			if (hardware.get_flag(0) == 1)
 				pc_offset = ins->memory_address - 2;
 			break;
 		case 12:
 			printf(ADDR_STR "wr %x (ra)\n", pc_offset,
-			       ins->memory_address);
+				ins->memory_address);
 			hardware.set_memory(ins->memory_address,
-					    hardware.get_register(0));
+				hardware.get_register(0));
 			break;
 		case 13:
 			printf(ADDR_STR "re (ra) %x\n", pc_offset,
-			       ins->memory_address);
+				ins->memory_address);
 			hardware.set_register(0, (Word)(hardware.get_memory(
-							 ins->memory_address)));
+				ins->memory_address)));
 			break;
 		case 14:
 			printf(ADDR_STR "exit\n", pc_offset);
@@ -199,80 +201,81 @@ Status Processor::eval(Word *program, size_t size)
 			break;
 		case 15:
 			printf(ADDR_STR "isa %x\n", pc_offset,
-			       ins->memory_address);
+				ins->memory_address);
 			isa_selected = ins->memory_address;
 			break;
 		case 16:
 			printf(ADDR_STR "push %x %x\n", pc_offset, ins->op0,
-			       ins->op1);
-			hardware.set_stack(ins->op0,
-					   hardware.get_register(ins->op1));
+				ins->op1);
+			hardware.set_stack(hardware.get_register(ins->op0),
+				hardware.get_register(ins->op1));
 			break;
 		case 17:
 			printf(ADDR_STR "pop %x %x\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			hardware.set_register(
-				ins->op0, (Word)(hardware.get_stack(ins->op1)));
+				hardware.get_register(ins->op0),
+				(Word)(hardware.get_stack(ins->op1)));
 			break;
 		case 18:
 			printf(ADDR_STR "xor %x %x\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			hardware.set_register(
 				ins->op0,
 				(Word)(hardware.get_register(ins->op0) ^
-				       hardware.get_register(ins->op0)));
+					hardware.get_register(ins->op0)));
 			break;
 		case 19:
 			printf(ADDR_STR "and %x %x\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			hardware.set_register(
 				ins->op0,
 				(Word)(hardware.get_register(ins->op0) &
-				       hardware.get_register(ins->op0)));
+					hardware.get_register(ins->op0)));
 			break;
 		case 20:
 			printf(ADDR_STR "or %x %x\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			hardware.set_register(
 				ins->op0,
 				(Word)(hardware.get_register(ins->op0) |
-				       hardware.get_register(ins->op0)));
+					hardware.get_register(ins->op0)));
 			break;
 		case 21:
 			printf(ADDR_STR "not %x\n", pc_offset, ins->op0);
 			hardware.set_register(ins->op0,
-					      (Word)(~hardware.get_register(
-						      ins->memory_address)));
+				(Word)(~hardware.get_register(
+					ins->memory_address)));
 			break;
 		case 22:
 			printf(ADDR_STR "mul %x %x\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			hardware.set_register(
 				ins->op0,
 				(Word)(hardware.get_register(ins->op0) *
-				       hardware.get_register(ins->op0)));
+					hardware.get_register(ins->op0)));
 			break;
 		case 23:
 			printf(ADDR_STR "div %x %x\n", pc_offset, ins->op0,
-			       ins->op1);
+				ins->op1);
 			hardware.set_register(
 				ins->op0,
 				(Word)(hardware.get_register(ins->op0) /
-				       hardware.get_register(ins->op0)));
+					hardware.get_register(ins->op0)));
 			break;
 		case 24:
 			printf(ADDR_STR "jmpr %x\n", pc_offset,
-			       ins->memory_address);
+				ins->memory_address);
 			pc_offset += ins->memory_address - 2;
 			break;
 		case 25:
 			printf(ADDR_STR "sc %x\n", pc_offset,
-			       ins->memory_address);
+				ins->memory_address);
 			system_call(ins->memory_address);
 			break;
 		case 31:
 			printf(ADDR_STR "isa %x\n", pc_offset,
-			       ins->memory_address);
+				ins->memory_address);
 			isa_selected = ins->memory_address;
 			break;
 		default:
@@ -283,6 +286,8 @@ Status Processor::eval(Word *program, size_t size)
 
 		// Move pc to next instruction
 		pc_offset += 2;
+
+		Sleep(1000);
 	}
 
 	return OK;
