@@ -84,13 +84,14 @@ Custom virtual machine / interpreter
 | 0x1110 | 0    | NULL  |                    |
 | 0x1111 | 1    | ISA   | page number        |
 
-### How to build it
+# How to build it
 
 * Linux with cmake
 ```
 $ git clone https://github.com/solanav/zh_vm
 $ cd zh_vm
 $ mkdir build
+$ cd build
 $ cmake ..
 $ make
 ```
