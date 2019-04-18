@@ -126,7 +126,6 @@ Status Processor::eval(Word *program, size_t size)
 			break;
 		case 8:
 			printf(ADDR_STR "cmp %d %d [%d - %d]\n", pc_offset, ins->op0, ins->op1, hardware.get_register(ins->op0), hardware.get_register(ins->op1));
-
 			if (hardware.get_register(ins->op0) == hardware.get_register(ins->op1))
 			{
 				hardware.set_flag(0, 1);
@@ -203,7 +202,6 @@ Status Processor::eval(Word *program, size_t size)
 			break;
 		case 23:
 			printf(ADDR_STR "div %x %x\n", pc_offset, ins->op0, ins->op1);
-			printf(ADDR_STR "[%x %x]\n", pc_offset, hardware.get_register(ins->op0), hardware.get_register(ins->op1));
 			if (hardware.get_register(ins->op1) != 0)
 				hardware.set_register(ins->op0, hardware.get_register(ins->op0) / hardware.get_register(ins->op1));
 			else 
@@ -216,6 +214,13 @@ Status Processor::eval(Word *program, size_t size)
 		case 25:
 			printf(ADDR_STR "sc %x\n", pc_offset, ins->memory_address);
 			system_call(ins->memory_address);
+			break;
+		case 26:
+			printf(ADDR_STR "mod %x %x\n", pc_offset, ins->op0, ins->op1);
+			if (hardware.get_register(ins->op1) != 0)
+				hardware.set_register(ins->op0, hardware.get_register(ins->op0) % hardware.get_register(ins->op1));
+			else
+				return ERROR;
 			break;
 		case 31:
 			printf(ADDR_STR "isa %x\n", pc_offset, ins->memory_address);
